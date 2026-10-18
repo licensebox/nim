@@ -1,0 +1,6 @@
+version = "0.1.0"
+author = "Licensebox"
+description = "Linux native Licensebox application SDK"
+license = "MIT"
+srcDir = "src"
+requires "nim >= 1.6.10"
