@@ -86,6 +86,7 @@ proc call*(self: Client; operation: string; args = newJObject()): JsonNode =
   owned(p)
 proc lease*(self: Client): JsonNode = self.call("lease")
 proc requireModule*(self: Client; name: string): JsonNode = self.call("require", %*{"module": valid(name)})
+proc heartbeat*(self: Client; name: string): JsonNode = self.call("heartbeat", %*{"module": valid(name)})
 proc status*(self: Client): JsonNode = self.call("status")
 proc signIn*(self: Client; timeout = 0.0): JsonNode = self.call("sign_in", %*{"timeout": timeout})
 proc logout*(self: Client) = discard self.call("logout")

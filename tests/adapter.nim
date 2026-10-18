@@ -28,6 +28,11 @@ proc run(r: JsonNode): JsonNode =
   defer: client.close()
   case op
   of "require": client.requireModule(if r.hasKey("module"): r["module"].getStr else: "core")
+  of "heartbeat", "heartbeat-repeat", "heartbeat-after-require":
+    let name = if r.hasKey("module"): r["module"].getStr else: "core"
+    if op == "heartbeat-after-require": discard client.requireModule("core")
+    if op == "heartbeat-repeat": discard client.heartbeat(name)
+    client.heartbeat(name)
   of "repeat":
     discard client.requireModule("core")
     client.requireModule("core")
