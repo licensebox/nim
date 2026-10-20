@@ -1,4 +1,4 @@
-version = "0.2.0"
+version = "0.3.0"
 author = "Licensebox"
 description = "Linux native Licensebox application SDK"
 license = "MIT"
