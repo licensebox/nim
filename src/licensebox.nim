@@ -94,6 +94,14 @@ proc modules*(self: Client): JsonNode = self.call("modules")
 proc requests*(self: Client): JsonNode = self.call("requests")
 proc requestAccess*(self: Client; names: seq[string]; note = ""): JsonNode = self.call("request", %*{"modules": names, "note": valid(note)})
 proc accessLink*(self: Client): string = self.call("access-link").getStr
+## Service accounts and floating copies: requireModule checks a floating module
+## out by itself; the options may carry enrol_token (else LICENSEBOX_ENROL_TOKEN).
+proc enrol*(self: Client; token: string): JsonNode = self.call("enrol", %*{"token": valid(token)})
+proc checkout*(self: Client; name: string): JsonNode = self.call("checkout", %*{"module": valid(name)})
+proc checkin*(self: Client; names: varargs[string]) =
+  var list: seq[string]
+  for n in names: list.add valid(n)
+  discard self.call("checkin", %*{"modules": list})
 proc recordUsage*(self: Client; command: string; success: bool; elapsed: float) = discard self.call("record", %*{"command": valid(command), "success": success, "elapsed": elapsed})
 proc deriveBinding*(product, source, rawId: string): string =
   discard valid(product); discard valid(source)

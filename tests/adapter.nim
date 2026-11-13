@@ -22,6 +22,7 @@ proc run(r: JsonNode): JsonNode =
   else: discard
   var options = %*{"product": product, "keys": r["keys"], "server": r["server"], "directory": r["directory"], "version": "conformance"}
   if r.hasKey("ca_bundle"): options["ca_bundle"] = r["ca_bundle"]
+  if r.hasKey("enrol_token"): options["enrol_token"] = r["enrol_token"]
   var callbacks = Callbacks(clock: clockCb, onSignIn: signinCb)
   if r.hasKey("binding"): callbacks.machineBinding = bindingCb
   let client = newClient(options, callbacks)
@@ -37,6 +38,11 @@ proc run(r: JsonNode): JsonNode =
     discard client.requireModule("core")
     client.requireModule("core")
   of "sign_in": client.signIn(3)
+  of "enrol": client.enrol(r["token"].getStr)
+  of "checkout": client.checkout(r["module"].getStr)
+  of "checkin":
+    client.checkin(r["module"].getStr)
+    newJNull()
   of "request": client.requestAccess(@["export"], "café – test")
   of "record":
     client.recordUsage("export", true, 0.125)
